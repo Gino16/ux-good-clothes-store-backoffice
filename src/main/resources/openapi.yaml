@@ -1,0 +1,351 @@
+openapi: 3.0.3
+info:
+  title: UX Good Clothe Store Backkofice
+  description: This is the backoffice of the UX Good Clothe Store
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local server
+tags:
+  - name: products
+    description: Everything about products
+  - name: tags
+    description: Everything about tags
+paths:
+  /tags:
+    post:
+      operationId: addTag
+      tags:
+        - tags
+      summary: Add a new tag to use in the store
+      requestBody:
+        description: Schema to create a new tag
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagRequest'
+      responses:
+        '204':
+          description: Successful operation
+    get:
+      operationId: listTags
+      tags:
+        - products
+      summary: Get all tags
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagResponse'
+  /tags/{tagId}:
+    get:
+      operationId: getTagById
+      tags:
+        - tags
+      summary: Get a tag by id
+      parameters:
+        - $ref: '#/components/parameters/TagId'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagResponse'
+        '404':
+          description: Tag not found
+    put:
+      operationId: updateTag
+      tags:
+        - products
+      summary: Update a tag
+      parameters:
+        - $ref: '#/components/parameters/TagId'
+      requestBody:
+        description: Schema to update a tag
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagRequest'
+      responses:
+        '204':
+          description: Successful operation
+        '404':
+          description: Tag not found
+    delete:
+      operationId: deleteTag
+      tags:
+        - products
+      summary: Delete a tag
+      parameters:
+        - $ref: '#/components/parameters/TagId'
+      responses:
+        '204':
+          description: Successful operation
+        '404':
+          description: Tag not found
+  /products:
+    post:
+      operationId: addProduct
+      tags:
+        - products
+      summary: Add a new product to use in the store
+      requestBody:
+        description: Schema to create a new product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '204':
+          description: Successful operation
+    get:
+      operationId: listProducts
+      tags:
+        - products
+      summary: Get all products
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductResponse'
+  /products/{productId}/types:
+    post:
+      operationId: addProductType
+      tags:
+        - products
+      summary: Add a new type to a product
+      parameters:
+        - $ref: '#/components/parameters/ProductId'
+      requestBody:
+        description: Schema to create a new type
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductTypeRequest'
+      responses:
+        '204':
+          description: Successful operation
+        '404':
+          description: Product not found
+    get:
+      operationId: listProductTypes
+      tags:
+        - products
+      summary: Get all types of a product
+      parameters:
+        - $ref: '#/components/parameters/ProductId'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductTypeResponse'
+        '404':
+          description: Product not found
+components:
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      description: Number of tags to return
+      required: false
+      schema:
+        type: integer
+        format: int32
+        example: 10
+    Offset:
+      name: offset
+      in: query
+      description: Number of tags to skip
+      required: false
+      schema:
+        type: integer
+        format: int32
+        example: 0
+    TagId:
+      name: tagId
+      in: path
+      description: Id of the tag to get
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: '19012da0-97a1-4891-ad8a-47feb2ded0a3'
+    ProductId:
+      name: productId
+      in: path
+      description: Id of the product to get
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: '19012da0-97a1-4891-ad8a-47feb2ded0a3'
+  schemas:
+    TagRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '19012da0-97a1-4891-ad8a-47feb2ded0a3'
+        title:
+          type: string
+          maxLength: 75
+          pattern: ^[a-zA-ZáéíóúñÁÉÍÓÚÑ ]+$
+          example: 'Jeans'
+    TagsResponse:
+      type: object
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagResponse'
+        metadata:
+          type: object
+          properties:
+            totalRecords:
+              type: integer
+              format: int32
+              example: 1
+            offset:
+              type: integer
+              format: int32
+              example: 0
+            limit:
+              type: integer
+              format: int32
+              example: 10
+    TagResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '19012da0-97a1-4891-ad8a-47feb2ded0a3'
+        title:
+          type: string
+          example: 'Jeans'
+    ProductRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          pattern: ^[a-zA-ZáéíóúñÁÉÍÓÚÑ ]+$
+          maxLength: 75
+          example: 'Jeans'
+        description:
+          type: string
+          pattern: ^[a-zA-ZáéíóúñÁÉÍÓÚÑ ]+$
+          example: 'The best jeans in the world'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagRequest'
+    TypeRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '19012da0-97a1-4891-ad8a-47feb2ded0a3'
+        title:
+          type: string
+          maxLength: 75
+          pattern: ^[a-zA-ZáéíóúñÁÉÍÓÚÑ ]+$
+          example: 'Jeans'
+    ProductTypeRequest:
+      type: object
+      properties:
+        price:
+          type: number
+          format: float
+          minimum: 0
+          example: 100.0
+        discount:
+          type: number
+          format: float
+          minimum: 0
+          example: 10.0
+        quantity:
+          type: integer
+          format: int32
+          minimum: 0
+          example: 10
+        startDiscount:
+          type: string
+          format: date-time
+          example: '2021-01-01T00:00:00.000Z'
+        endDiscount:
+          type: string
+          format: date-time
+          example: '2021-01-01T00:00:00.000Z'
+        type:
+          $ref: '#/components/schemas/TypeRequest'
+    ProductTypeResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '19012da0-97a1-4891-ad8a-47feb2ded0a3'
+        price:
+          type: number
+          format: float
+          minimum: 0
+          example: 100.0
+        discount:
+          type: number
+          format: float
+          minimum: 0
+          example: 10.0
+        quantity:
+          type: integer
+          format: int32
+          minimum: 0
+          example: 10
+        startDiscount:
+          type: string
+          format: date-time
+          example: '2021-01-01T00:00:00.000Z'
+        endDiscount:
+          type: string
+          format: date-time
+          example: '2021-01-01T00:00:00.000Z'
+        type:
+          $ref: '#/components/schemas/TypeRequest'
+    ProductResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 1
+        title:
+          type: string
+          example: 'Jeans'
+        description:
+          type: string
+          example: 'The best jeans in the world'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagResponse'
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductTypeResponse'
