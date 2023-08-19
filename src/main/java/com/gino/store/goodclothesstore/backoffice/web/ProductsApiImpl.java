@@ -14,9 +14,5 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api/v1/products")
 public class ProductsApiImpl implements ProductsApi {
 
-  @Override
-  public Mono<ResponseEntity<Flux<ProductResponse>>> listProducts(
-      ServerWebExchange exchange) {
-    return ProductsApi.super.listProducts(exchange);
-  }
+
 }

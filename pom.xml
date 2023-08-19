@@ -43,7 +43,34 @@
       <artifactId>reactor-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <!--	Swagger Generator Dependency	-->
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+      <version>1.5.3.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.javafaker</groupId>
+      <artifactId>javafaker</artifactId>
+      <version>1.0.2</version>
+    </dependency>
+    <!--	START Swagger Generator Dependency	-->
     <dependency>
       <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-annotations</artifactId>
@@ -59,6 +86,8 @@
       <artifactId>jakarta.validation-api</artifactId>
       <version>3.0.2</version>
     </dependency>
+    <!--	END Swagger Generator Dependency	-->
+
 
   </dependencies>
 
@@ -67,6 +96,11 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
       </plugin>
       <plugin>
         <groupId>org.openapitools</groupId>
@@ -95,6 +129,9 @@
                 <useSpringBoot3>true</useSpringBoot3>
                 <interfaceOnly>true</interfaceOnly>
                 <sourceFolder>src/main/java</sourceFolder>
+                <additionalModelTypeAnnotations>@lombok.Builder @lombok.NoArgsConstructor
+                  @lombok.AllArgsConstructor
+                </additionalModelTypeAnnotations>
               </configOptions>
             </configuration>
           </execution>

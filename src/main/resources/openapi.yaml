@@ -11,6 +11,8 @@ tags:
     description: Everything about products
   - name: tags
     description: Everything about tags
+  - name: types
+    description: Everything about types
 paths:
   /tags:
     post:
@@ -30,7 +32,7 @@ paths:
     get:
       operationId: listTags
       tags:
-        - products
+        - tags
       summary: Get all tags
       parameters:
         - $ref: '#/components/parameters/Limit'
@@ -41,9 +43,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/TagResponse'
+                $ref: '#/components/schemas/TagsResponse'
   /tags/{tagId}:
     get:
       operationId: getTagById
@@ -64,7 +64,7 @@ paths:
     put:
       operationId: updateTag
       tags:
-        - products
+        - tags
       summary: Update a tag
       parameters:
         - $ref: '#/components/parameters/TagId'
@@ -82,7 +82,7 @@ paths:
     delete:
       operationId: deleteTag
       tags:
-        - products
+        - tags
       summary: Delete a tag
       parameters:
         - $ref: '#/components/parameters/TagId'
@@ -119,7 +119,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ProductResponse'
+                  $ref: '#/components/schemas/ProductsResponse'
   /products/{productId}/types:
     post:
       operationId: addProductType
@@ -157,6 +157,35 @@ paths:
                   $ref: '#/components/schemas/ProductTypeResponse'
         '404':
           description: Product not found
+  /types:
+    post:
+      operationId: addType
+      tags:
+        - types
+      summary: Add a new type to use in the store
+      requestBody:
+        description: Schema to create a new type
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TypeRequest'
+      responses:
+        '204':
+          description: Successful operation
+    get:
+      operationId: listTypes
+      tags:
+        - types
+      summary: Get all types
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TypeRequest'
 components:
   parameters:
     Limit:
@@ -208,28 +237,6 @@ components:
           maxLength: 75
           pattern: ^[a-zA-ZáéíóúñÁÉÍÓÚÑ ]+$
           example: 'Jeans'
-    TagsResponse:
-      type: object
-      properties:
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagResponse'
-        metadata:
-          type: object
-          properties:
-            totalRecords:
-              type: integer
-              format: int32
-              example: 1
-            offset:
-              type: integer
-              format: int32
-              example: 0
-            limit:
-              type: integer
-              format: int32
-              example: 10
     TagResponse:
       type: object
       properties:
@@ -240,6 +247,15 @@ components:
         title:
           type: string
           example: 'Jeans'
+    TagsResponse:
+      type: object
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagResponse'
+        metadata:
+          $ref: '#/components/schemas/Metadata'
     ProductRequest:
       type: object
       properties:
@@ -349,3 +365,37 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProductTypeResponse'
+    ProductsResponse:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductResponse'
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+    ProductTypesResponse:
+      type: object
+      properties:
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductTypeResponse'
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+    Metadata:
+      title: Metadata
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          format: int32
+          example: 1
+        offset:
+          type: integer
+          format: int32
+          example: 0
+        limit:
+          type: integer
+          format: int32
+          example: 10

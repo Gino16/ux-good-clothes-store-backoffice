@@ -1,2 +1,26 @@
 server:
   port: 8080
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        default_schema: inventory
+    show-sql: true
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/DBSTOREPOSTGRESQL
+    username: store_client
+    password: 1234
+    hikari:
+        maximum-pool-size: 5
+        minimum-idle: 3
+        idle-timeout: 30000
+        pool-name: StoreHikariCP
+        max-lifetime: 2000000
+        connection-timeout: 30000
+        connection-test-query: SELECT 1
+        validation-timeout: 5000
+        auto-commit: false
