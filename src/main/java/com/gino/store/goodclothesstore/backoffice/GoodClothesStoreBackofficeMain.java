@@ -24,7 +24,7 @@ public class GoodClothesStoreBackofficeMain implements CommandLineRunner {
 
   @Override
   public void run(String... args) {
-    FakeValuesService fakeValuesService = new FakeValuesService(new Locale("es-PE"),
+    FakeValuesService fakeValuesService = new FakeValuesService(Locale.ENGLISH,
         new RandomService());
     List<Tag> tags = new ArrayList<>();
     for (int i = 0; i < 100; i++) {

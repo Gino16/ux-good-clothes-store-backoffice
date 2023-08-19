@@ -9,6 +9,7 @@ import com.gino.store.backoffice.model.TagsResponse;
 import com.gino.store.goodclothesstore.backoffice.business.TagsService;
 import com.gino.store.goodclothesstore.backoffice.mapper.TagsMapper;
 import com.gino.store.goodclothesstore.backoffice.model.Tag;
+import com.gino.store.goodclothesstore.backoffice.redis.InMemoryService;
 import com.gino.store.goodclothesstore.backoffice.repository.TagsRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +26,10 @@ public class TagsServiceImpl implements TagsService {
 
   private final TagsRepository tagsRepository;
   private final TagsMapper tagsMapper;
+  private final InMemoryService redisService;
 
   @Override
-  public Mono<TagsResponse> listTags(Integer limit, Integer offset) {
+  public Mono<TagsResponse> listTags(UUID xAuthToken, Integer limit, Integer offset) {
     return Mono.fromCallable(() -> tagsRepository.listTags(buildPageRequest(limit, offset)))
         .map(tags -> TagsResponse.builder()
             .tags(tagsMapper.tagToTagResponse(tags.getContent()))
@@ -36,7 +38,7 @@ public class TagsServiceImpl implements TagsService {
   }
 
   @Override
-  public Mono<Void> addTag(Mono<TagRequest> tagRequest) {
+  public Mono<Void> addTag(UUID xAuthToken, Mono<TagRequest> tagRequest) {
     return tagRequest.map(
             tagsMapper::tagRequestToTag)
         .map(tagsRepository::save)
@@ -45,14 +47,14 @@ public class TagsServiceImpl implements TagsService {
   }
 
   @Override
-  public Mono<Void> deleteTag(UUID tagId) {
+  public Mono<Void> deleteTag(UUID tagId, UUID xAuthToken) {
     return Mono.fromRunnable(() -> tagsRepository.deleteById(tagId))
         .doOnTerminate(() -> log.info("Tag {} deleted", tagId))
         .then();
   }
 
   @Override
-  public Mono<TagResponse> getTagById(UUID tagId) {
+  public Mono<TagResponse> getTagById(UUID tagId, UUID id) {
     return Mono.fromCallable(() -> tagsRepository.findById(tagId))
         .map(tag -> tag.orElseThrow(() -> new RuntimeException("Tag not found")))
         .map(tag -> TagResponse.builder()

@@ -8,8 +8,8 @@ import reactor.core.publisher.Mono;
 
 public interface TagsService {
 
-  Mono<TagsResponse> listTags(Integer limit, Integer offset);
-  Mono<Void> addTag(Mono<TagRequest> tagRequest);
-  Mono<Void> deleteTag(UUID tagId);
-  Mono<TagResponse> getTagById(UUID tagId);
+  Mono<TagsResponse> listTags(UUID xAuthToken, Integer limit, Integer offset);
+  Mono<Void> addTag(UUID xAuthToken, Mono<TagRequest> tagRequest);
+  Mono<Void> deleteTag(UUID tagId, UUID xAuthToken);
+  Mono<TagResponse> getTagById(UUID tagId, UUID id);
 }

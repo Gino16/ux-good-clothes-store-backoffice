@@ -20,6 +20,8 @@ paths:
       tags:
         - tags
       summary: Add a new tag to use in the store
+      parameters:
+        - $ref: '#/components/parameters/x-auth-token'
       requestBody:
         description: Schema to create a new tag
         content:
@@ -35,6 +37,7 @@ paths:
         - tags
       summary: Get all tags
       parameters:
+        - $ref: '#/components/parameters/x-auth-token'
         - $ref: '#/components/parameters/Limit'
         - $ref: '#/components/parameters/Offset'
       responses:
@@ -51,6 +54,7 @@ paths:
         - tags
       summary: Get a tag by id
       parameters:
+        - $ref: '#/components/parameters/x-auth-token'
         - $ref: '#/components/parameters/TagId'
       responses:
         '200':
@@ -68,6 +72,7 @@ paths:
       summary: Update a tag
       parameters:
         - $ref: '#/components/parameters/TagId'
+        - $ref: '#/components/parameters/x-auth-token'
       requestBody:
         description: Schema to update a tag
         content:
@@ -86,6 +91,7 @@ paths:
       summary: Delete a tag
       parameters:
         - $ref: '#/components/parameters/TagId'
+        - $ref: '#/components/parameters/x-auth-token'
       responses:
         '204':
           description: Successful operation
@@ -97,6 +103,8 @@ paths:
       tags:
         - products
       summary: Add a new product to use in the store
+      parameters:
+        - $ref: '#/components/parameters/x-auth-token'
       requestBody:
         description: Schema to create a new product
         content:
@@ -111,6 +119,8 @@ paths:
       tags:
         - products
       summary: Get all products
+      parameters:
+        - $ref: '#/components/parameters/x-auth-token'
       responses:
         '200':
           description: Successful operation
@@ -127,6 +137,7 @@ paths:
         - products
       summary: Add a new type to a product
       parameters:
+        - $ref: '#/components/parameters/x-auth-token'
         - $ref: '#/components/parameters/ProductId'
       requestBody:
         description: Schema to create a new type
@@ -145,6 +156,7 @@ paths:
         - products
       summary: Get all types of a product
       parameters:
+        - $ref: '#/components/parameters/x-auth-token'
         - $ref: '#/components/parameters/ProductId'
       responses:
         '200':
@@ -219,6 +231,15 @@ components:
       name: productId
       in: path
       description: Id of the product to get
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: '19012da0-97a1-4891-ad8a-47feb2ded0a3'
+    x-auth-token:
+      name: xAuthToken
+      in: header
+      description: Session token
       required: true
       schema:
         type: string
