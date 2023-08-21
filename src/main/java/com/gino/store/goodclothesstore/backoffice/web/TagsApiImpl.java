@@ -21,7 +21,7 @@ public class TagsApiImpl implements TagsApi {
   private final TagsService tagsService;
 
   @Override
-  public Mono<ResponseEntity<Void>> addTag(UUID xAuthToken, Mono<TagRequest> tagRequest,
+  public Mono<ResponseEntity<Void>> addTag(String xAuthToken, Mono<TagRequest> tagRequest,
       ServerWebExchange exchange) {
     return tagsService.addTag(xAuthToken, tagRequest)
         .map(ResponseEntity::ok);
@@ -29,29 +29,36 @@ public class TagsApiImpl implements TagsApi {
 
 
   @Override
-  public Mono<ResponseEntity<TagResponse>> getTagById(UUID xAuthToken, UUID tagId,
+  public Mono<ResponseEntity<TagResponse>> getTagById(String xAuthToken, UUID tagId,
       ServerWebExchange exchange) {
     return tagsService.getTagById(xAuthToken, tagId)
         .map(ResponseEntity::ok);
   }
 
   @Override
-  public Mono<ResponseEntity<TagsResponse>> listTags(UUID xAuthToken, Integer limit, Integer offset,
+  public Mono<ResponseEntity<TagsResponse>> listTags(String xAuthToken,
       ServerWebExchange exchange) {
-    return tagsService.listTags(xAuthToken, limit, offset)
+    return tagsService.listTags(xAuthToken)
         .map(ResponseEntity::ok);
   }
 
   @Override
-  public Mono<ResponseEntity<Void>> updateTag(UUID tagId, UUID xAuthToken,
-      Mono<TagRequest> tagRequest, ServerWebExchange exchange) {
-    return TagsApi.super.updateTag(tagId, xAuthToken, tagRequest, exchange);
+  public Mono<ResponseEntity<TagsResponse>> getTagsByTitle(String xAuthToken, String title,
+      ServerWebExchange exchange) {
+    return tagsService.getTagsByTitle(xAuthToken, title)
+        .map(ResponseEntity::ok);
   }
 
   @Override
-  public Mono<ResponseEntity<Void>> deleteTag(UUID tagId, UUID xAuthToken,
+  public Mono<ResponseEntity<Void>> updateTag(String xAuthToken, UUID tagId,
+      Mono<TagRequest> tagRequest, ServerWebExchange exchange) {
+    return TagsApi.super.updateTag(xAuthToken, tagId, tagRequest, exchange);
+  }
+
+  @Override
+  public Mono<ResponseEntity<Void>> deleteTag(String xAuthToken, UUID tagId,
       ServerWebExchange exchange) {
-    return tagsService.deleteTag(tagId, xAuthToken)
+    return tagsService.deleteTag(xAuthToken, tagId)
         .map(ResponseEntity::ok);
   }
 

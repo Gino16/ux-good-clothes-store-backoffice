@@ -38,8 +38,6 @@ paths:
       summary: Get all tags
       parameters:
         - $ref: '#/components/parameters/x-auth-token'
-        - $ref: '#/components/parameters/Limit'
-        - $ref: '#/components/parameters/Offset'
       responses:
         '200':
           description: Successful operation
@@ -71,8 +69,8 @@ paths:
         - tags
       summary: Update a tag
       parameters:
-        - $ref: '#/components/parameters/TagId'
         - $ref: '#/components/parameters/x-auth-token'
+        - $ref: '#/components/parameters/TagId'
       requestBody:
         description: Schema to update a tag
         content:
@@ -90,11 +88,36 @@ paths:
         - tags
       summary: Delete a tag
       parameters:
-        - $ref: '#/components/parameters/TagId'
         - $ref: '#/components/parameters/x-auth-token'
+        - $ref: '#/components/parameters/TagId'
       responses:
         '204':
           description: Successful operation
+        '404':
+          description: Tag not found
+  /tags/{title}:
+    get:
+      operationId: getTagsByTitle
+      tags:
+        - tags
+      summary: Get tags by title
+      parameters:
+        - $ref: '#/components/parameters/x-auth-token'
+        - name: title
+          in: path
+          description: Title of the tag to get
+          required: true
+          schema:
+            type: string
+            pattern: ^[a-zA-ZáéíóúñÁÉÍÓÚÑ ]+$
+            example: 'Jeans'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagsResponse'
         '404':
           description: Tag not found
   /products:
@@ -237,13 +260,13 @@ components:
         format: uuid
         example: '19012da0-97a1-4891-ad8a-47feb2ded0a3'
     x-auth-token:
-      name: xAuthToken
+      name: x-auth-token
       in: header
       description: Session token
       required: true
       schema:
         type: string
-        format: uuid
+        pattern: ^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$
         example: '19012da0-97a1-4891-ad8a-47feb2ded0a3'
   schemas:
     TagRequest:
@@ -275,8 +298,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TagResponse'
-        metadata:
-          $ref: '#/components/schemas/Metadata'
     ProductRequest:
       type: object
       properties:
