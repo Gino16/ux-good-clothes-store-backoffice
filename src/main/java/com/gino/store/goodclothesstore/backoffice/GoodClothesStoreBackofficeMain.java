@@ -29,7 +29,7 @@ public class GoodClothesStoreBackofficeMain implements CommandLineRunner {
     List<Tag> tags = new ArrayList<>();
     for (int i = 0; i < 100; i++) {
       tags.add(Tag.builder()
-          .name(fakeValuesService.bothify("Tag-?????"))
+          .title(fakeValuesService.bothify("Tag-?????"))
           .build());
     }
     tagsRepository.saveAll(tags);

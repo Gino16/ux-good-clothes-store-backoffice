@@ -95,7 +95,7 @@ paths:
           description: Successful operation
         '404':
           description: Tag not found
-  /tags/{title}:
+  /tags/search:
     get:
       operationId: getTagsByTitle
       tags:
@@ -104,7 +104,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/x-auth-token'
         - name: title
-          in: path
+          in: query
           description: Title of the tag to get
           required: true
           schema:
