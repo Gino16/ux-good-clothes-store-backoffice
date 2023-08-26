@@ -7,6 +7,7 @@ import com.gino.store.backoffice.model.TagsResponse;
 import com.gino.store.goodclothesstore.backoffice.business.TagsService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ public class TagsApiImpl implements TagsApi {
   public Mono<ResponseEntity<Void>> addTag(String xAuthToken, Mono<TagRequest> tagRequest,
       ServerWebExchange exchange) {
     return tagsService.addTag(xAuthToken, tagRequest)
-        .map(ResponseEntity::ok);
+        .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED).build()));
   }
 
 
@@ -59,7 +60,7 @@ public class TagsApiImpl implements TagsApi {
   public Mono<ResponseEntity<Void>> deleteTag(String xAuthToken, UUID tagId,
       ServerWebExchange exchange) {
     return tagsService.deleteTag(xAuthToken, tagId)
-        .map(ResponseEntity::ok);
+        .then(Mono.just(ResponseEntity.noContent().build()));
   }
 
 }
