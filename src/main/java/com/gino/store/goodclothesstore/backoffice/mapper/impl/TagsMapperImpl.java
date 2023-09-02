@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class TagsMapperImpl implements TagsMapper {
 
   @Override
-  public List<TagResponse> tagToTagResponse(List<Tag> tags) {
+  public List<TagResponse> toTagResponse(List<Tag> tags) {
     return tags.stream()
         .map(tag -> TagResponse.builder()
             .id(tag.getId())
@@ -22,7 +22,7 @@ public class TagsMapperImpl implements TagsMapper {
   }
 
   @Override
-  public Tag tagRequestToTag(TagRequest tagRequest) {
+  public Tag toTag(TagRequest tagRequest) {
     return Tag.builder()
         .title(tagRequest.getTitle())
         .build();

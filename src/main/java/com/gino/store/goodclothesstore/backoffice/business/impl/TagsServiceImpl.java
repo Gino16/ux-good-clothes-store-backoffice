@@ -29,7 +29,7 @@ public class TagsServiceImpl implements TagsService {
   public Mono<TagsResponse> getTagsByTitle(String xAuthToken, String title) {
     return Mono.fromCallable(() -> tagsRepository.findByName(title))
         .map(tags -> TagsResponse.builder()
-            .tags(tagsMapper.tagToTagResponse(tags))
+            .tags(tagsMapper.toTagResponse(tags))
             .build())
         .doOnSuccess(tagsResponse -> log.info("Tags response built"));
   }
@@ -37,7 +37,7 @@ public class TagsServiceImpl implements TagsService {
   private Mono<TagsResponse> getTagsFromRepository(String xAuthToken) {
     return Mono.fromCallable(tagsRepository::listTags)
         .map(tags -> TagsResponse.builder()
-            .tags(tagsMapper.tagToTagResponse(tags))
+            .tags(tagsMapper.toTagResponse(tags))
             .build())
         .doOnSuccess(tagsResponse -> log.info("Tags response built"));
   }
@@ -45,7 +45,7 @@ public class TagsServiceImpl implements TagsService {
   @Override
   public Mono<Void> addTag(String xAuthToken, Mono<TagRequest> tagRequest) {
     return tagRequest.map(
-            tagsMapper::tagRequestToTag)
+            tagsMapper::toTag)
         .map(tagsRepository::save)
         .then();
   }
